@@ -4,6 +4,20 @@ function toggleMenu() {
   if (links) { links.classList.toggle('open'); }
 }
 
+/* ===== 提示词折叠控制 ===== */
+function togglePrompt() {
+  var sec = document.getElementById('promptSection');
+  var btn = document.getElementById('promptToggle');
+  if (!sec || !btn) return;
+  if (sec.style.display === 'none') {
+    sec.style.display = 'block';
+    btn.textContent = '🔓 收起提示词';
+  } else {
+    sec.style.display = 'none';
+    btn.textContent = '🔒 研究人员入口（点击展开提示词）';
+  }
+}
+
 /* ===== 提示词复制 ===== */
 function copyPrompt() {
   var box = document.getElementById('promptBox');
