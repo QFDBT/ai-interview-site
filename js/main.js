@@ -1,9 +1,3 @@
-/* ===== 移动端导航 ===== */
-function toggleMenu() {
-  var links = document.getElementById('navLinks');
-  if (links) { links.classList.toggle('open'); }
-}
-
 /* ===== 提示词折叠控制 ===== */
 function togglePrompt() {
   var sec = document.getElementById('promptSection');
@@ -50,43 +44,30 @@ function fallbackCopy(text, done) {
   document.body.removeChild(ta);
 }
 
-/* ===== 模拟访谈（本地演示脚本，无网络请求） ===== */
-var demoScript = [
-  {
-    ai: '您好！我是本次用户访谈的专员，想和您聊聊养猫和逗猫玩具的话题，大约 15 分钟，信息仅用于产品研究。请问您现在方便吗？您家猫咪多大了？平时白天家里没人时，它一般都在做什么？',
-    tag: '开场 · 研究问题①'
-  },
-  {
-    ai: '理解了，猫独自在家确实容易无聊。能举一个具体的例子吗？比如上一次它拆家或半夜跑酷是什么情形？当时您是怎么处理的？',
-    tag: '追问场景 · 研究问题①'
-  },
-  {
-    ai: '这些情况听起来挺让您头疼的。那您之前给它买过哪些逗猫玩具？玩的时候有没有什么不满意的地方？',
-    tag: '研究问题②'
-  },
-  {
-    ai: '您提到的问题很典型。如果有一款能自己跑、自动避开障碍、还带激光和羽毛的电动逗猫球，您觉得它值多少钱？为什么？',
-    tag: '心理价位 · 研究问题③'
-  },
-  {
-    ai: '明白了。这类玩具目前定价是首件 19.9 元、单独购买 43 元，听完这个价格您的第一反应是什么？另外有没有担心过激光伤眼睛、猫把羽毛咬下来吞掉这类安全问题？',
-    tag: '价格反应 + 安全 · 研究问题④'
-  }
+/* ===== 正式访谈：13 题，答完自动结束并上交 ===== */
+var QUESTIONS = [
+  '您好！感谢您参与本次猫咪玩具体验访谈，共 13 个问题，约 3 分钟。第 1 题：请问您家里养了几只猫？猫咪现在多大？',
+  '第 2 题：您平时上班或外出时，猫咪一天大概要独自在家多长时间？',
+  '第 3 题：猫咪独自在家时，通常会有哪些行为？比如睡觉、拆家、挠沙发、半夜跑酷等，请具体说说。',
+  '第 4 题：这些行为里，最让您头疼的是哪一件？大概多久出现一次？',
+  '第 5 题：您之前给猫咪买过哪些玩具？',
+  '第 6 题：这些玩具里，猫咪最喜欢玩的是哪个？玩了多久就失去兴趣了？',
+  '第 7 题：您在使用这些玩具时遇到过什么不满意的地方？比如需要人拿着陪玩、声音太吵、不耐咬、猫很快玩腻等。',
+  '第 8 题：如果有一款电动逗猫球，能自己跑、遇到障碍自动转向、还带激光红点和可替换的羽毛配件，您觉得这样的产品对您有用吗？为什么？',
+  '第 9 题：关于这类产品，您有哪些担心？比如激光晃到猫眼睛、羽毛被咬下来误食、轮子吵到邻居、充不上电等。',
+  '第 10 题：您平时买猫咪玩具，最看重哪几点？请从价格、安全、静音、续航、颜值、耐咬里选出您最看重的三项并排个顺序。',
+  '第 11 题：对这类电动逗猫玩具，您觉得多少钱以内您会直接下单？说说您的理由。',
+  '第 12 题：有一款在售产品，首件特价 19.9 元（限 1 件），平时单买 43 元。听完这个价格，您的第一反应是什么？',
+  '最后一题（第 13 题）：如果这样一款产品能明显减少猫咪独自在家时的无聊和拆家行为，您愿意推荐给身边的猫友吗？您还有什么其他想法或建议？'
 ];
 
-var summary = [
-  '受访者画像：养猫人，白天猫独处，存在夜间跑酷 / 拆家行为',
-  '研究问题①：猫无聊引发行为问题，频率高、主人困扰大',
-  '研究问题②：现有玩具新鲜感短、需人手持、有闲置浪费',
-  '研究问题③：自动避障三合一有感知价值，心理价位待更多样本验证',
-  '研究问题④：价格敏感但可接受首件价；安全（激光/误食）是明确顾虑',
-  '待改进：需增加已购用户样本，验证卖点兑现情况'
-];
-
-var chatStep = 0;
+var currentQ = 0;
+var answers = [];
+var finished = false;
 
 function addMsg(role, text) {
   var log = document.getElementById('chatLog');
+  if (!log) return;
   var wrap = document.createElement('div');
   wrap.className = 'msg ' + role;
   var bubble = document.createElement('div');
@@ -97,60 +78,127 @@ function addMsg(role, text) {
   log.scrollTop = log.scrollHeight;
 }
 
-function addTag(text) {
+function addNote(text) {
   var log = document.getElementById('chatLog');
+  if (!log) return;
   var div = document.createElement('div');
   div.className = 'msg ai';
   var bubble = document.createElement('div');
   bubble.className = 'bubble';
   bubble.style.fontSize = '12px';
   bubble.style.color = '#8a7f78';
-  bubble.textContent = '【' + text + '】';
+  bubble.textContent = text;
   div.appendChild(bubble);
   log.appendChild(div);
   log.scrollTop = log.scrollHeight;
 }
 
-function nextAiTurn() {
-  if (chatStep >= demoScript.length) return;
-  var item = demoScript[chatStep];
-  addMsg('ai', item.ai);
-  addTag(item.tag);
-  chatStep++;
+function lockInput() {
+  var input = document.getElementById('chatInput');
+  if (input) {
+    input.value = '';
+    input.placeholder = '访谈已完成，感谢您的参与！';
+    input.disabled = true;
+  }
+  var endBtn = document.getElementById('endBtn');
+  if (endBtn) endBtn.style.display = 'none';
 }
 
-function confirmEnd() {
-  if (confirm('确定要结束访谈吗？结束后将生成访谈纪要。')) {
-    endInterview();
+function buildSummary() {
+  var lines = [];
+  lines.push('【用户访谈记录 · 智能逗猫球项目】');
+  lines.push('完成时间：' + new Date().toLocaleString());
+  lines.push('答题进度：13/13 已完成');
+  lines.push('');
+  for (var i = 0; i < answers.length; i++) {
+    lines.push('Q' + (i + 1) + '：' + QUESTIONS[i].replace(/^第 ?\d+ ?题[：:]?|^最后一题（第 ?\d+ ?题）[：:]?/, '').replace(/^您好！感谢您参与本次猫咪玩具体验访谈，共 ?13 ?个问题，约 ?3 ?分钟。/, ''));
+    lines.push('A' + (i + 1) + '：' + answers[i]);
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+function finishInterview() {
+  if (finished) return;
+  finished = true;
+  lockInput();
+  addMsg('ai', '访谈完成！非常感谢您的耐心回答，您的反馈对我们改进产品非常重要。以下是您的访谈记录：');
+  var summary = buildSummary();
+  addNote(summary);
+  var btnWrap = document.createElement('div');
+  btnWrap.style.textAlign = 'center';
+  btnWrap.style.padding = '10px 16px 16px';
+  btnWrap.style.background = '#fff';
+  var copyB = document.createElement('button');
+  copyB.className = 'btn btn-primary';
+  copyB.textContent = '📤 一键复制访谈记录（发送给 interviewer）';
+  copyB.onclick = function () {
+    var done = function () {
+      copyB.textContent = '✅ 已复制，请粘贴发送给工作人员';
+      copyB.classList.add('copied');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(summary).then(done).catch(function () { fallbackCopy(summary, done); });
+    } else {
+      fallbackCopy(summary, done);
+    }
+  };
+  btnWrap.appendChild(copyB);
+  var log = document.getElementById('chatLog');
+  if (log && log.parentElement) {
+    var oldHint = log.parentElement.querySelector('.chat-hint');
+    if (oldHint) oldHint.remove();
+    log.parentElement.appendChild(btnWrap);
+  }
+}
+
+function askNext() {
+  if (currentQ < QUESTIONS.length) {
+    addMsg('ai', QUESTIONS[currentQ]);
+  } else {
+    finishInterview();
   }
 }
 
 function submitAnswer() {
   var input = document.getElementById('chatInput');
-  if (!input || input.disabled) return;
+  if (!input || finished) return;
   var val = input.value.trim();
-  if (!val) return;
-  addMsg('user', val);
+  if (!val) {
+    input.placeholder = '请先输入您的回答再发送哦…';
+    return;
+  }
+  answers.push(val);
   input.value = '';
-  setTimeout(nextAiTurn, 400);
+  currentQ++;
+  if (currentQ < QUESTIONS.length) {
+    addNote('第 ' + currentQ + ' / 13 题已完成');
+  }
+  setTimeout(askNext, 400);
 }
 
 function endInterview() {
-  if (!document.getElementById('chatLog')) return;
-  addMsg('ai', '感谢您的时间！以下是本次访谈的结构化纪要：');
-  summary.forEach(function (line) { addTag(line.replace('研究问题', '已覆盖 · 研究问题')); });
-  var input = document.getElementById('chatInput');
-  if (input) { input.value = ''; input.placeholder = '访谈已结束，请刷新页面重新体验'; input.disabled = true; }
+  if (finished) return;
+  if (answers.length === 0) return;
+  finishInterview();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  var log = document.getElementById('chatLog');
   var input = document.getElementById('chatInput');
-  if (!log || !input) return;
-
-  nextAiTurn();
+  var log = document.getElementById('chatLog');
+  if (!input || !log) return;
 
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { submitAnswer(); }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitAnswer();
+    }
   });
+
+  var endBtn = document.getElementById('endBtn');
+  if (endBtn) {
+    endBtn.onclick = function () { endInterview(); };
+  }
+
+  askNext();
 });
