@@ -9,6 +9,10 @@
 <link rel="stylesheet" href="css/style.css">
 <style>
   body { background: #fff; }
+  .btn-end { background: none; border: none; color: #b8aca3; font-size: 13px; text-decoration: underline; cursor: pointer; }
+  .chat-log { padding-bottom: 26px; position: relative; }
+  .end-link { position: absolute; bottom: 4px; right: 12px; font-size: 12px; color: #c5bab1; }
+  .end-link button { background: none; border: none; color: #c5bab1; font-size: 12px; text-decoration: underline; cursor: pointer; }
   .iv-head { text-align: center; padding: 34px 20px 10px; }
   .iv-head h1 { font-size: 22px; }
   .iv-head p { color: var(--muted); font-size: 14px; margin-top: 6px; }
@@ -26,8 +30,9 @@
     <div class="chat-log" id="chatLog"></div>
     <div class="chat-input">
       <input type="text" id="chatInput" placeholder="请输入您的回答…" aria-label="访谈回复输入框">
-      <button id="endBtn" onclick="endInterview()">结束访谈</button>
+      <button class="btn btn-primary" style="border-radius:0; padding:0 26px;" onclick="submitAnswer()">发送</button>
     </div>
+    <div class="end-link">访谈完毕？<button id="endBtn" onclick="confirmEnd()">点此结束</button></div>
   </div>
   <p class="muted" style="text-align:center; margin-top:14px;">如实回答即可，没有对错之分。您的反馈对改进产品非常重要。</p>
 </main>
