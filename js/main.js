@@ -119,6 +119,22 @@ function nextAiTurn() {
   chatStep++;
 }
 
+function confirmEnd() {
+  if (confirm('确定要结束访谈吗？结束后将生成访谈纪要。')) {
+    endInterview();
+  }
+}
+
+function submitAnswer() {
+  var input = document.getElementById('chatInput');
+  if (!input || input.disabled) return;
+  var val = input.value.trim();
+  if (!val) return;
+  addMsg('user', val);
+  input.value = '';
+  setTimeout(nextAiTurn, 400);
+}
+
 function endInterview() {
   if (!document.getElementById('chatLog')) return;
   addMsg('ai', '感谢您的时间！以下是本次访谈的结构化纪要：');
@@ -134,21 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   nextAiTurn();
 
-  function submit() {
-    var val = input.value.trim();
-    if (!val) return;
-    if (input.disabled) return;
-    addMsg('user', val);
-    input.value = '';
-    setTimeout(nextAiTurn, 400);
-    if (chatStep >= demoScript.length) {
-      setTimeout(function () {
-        endInterview();
-      }, 900);
-    }
-  }
-
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { submit(); }
+    if (e.key === 'Enter') { submitAnswer(); }
   });
 });
