@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>访谈大纲合理性审查 · AI用户访谈专员</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="dot"></span>AI访谈专员</a>
+    <button class="menu-toggle" aria-label="打开菜单" onclick="toggleMenu()">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">首页</a>
+      <a href="research.html">目标与人群</a>
+      <a href="prompt.html">AI专员提示词</a>
+      <a href="review.html" class="active">合理性审查</a>
+      <a href="data.html">数据后台</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-head">
+  <h1>对 AI 产出访谈大纲的合理性审查</h1>
+  <p>先让 AI 生成大纲，再人工逐条审查——这是本作业的核心环节</p>
+</section>
+
+<main class="container">
+
+  <div class="card">
+    <div class="step"><div class="num">🔍</div><h2>审查表：AI 常见产出问题</h2></div>
+    <p class="muted">先用 AI 生成一版访谈大纲，再按下表逐条审查（以下为典型示例）：</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th style="width:32%">AI 常见产出问题</th><th style="width:18%">审查结论</th><th>修改建议</th></tr>
+      <tr><td>"您觉得我们的智能避障逗猫球好用吗？"</td><td class="tag-bad">❌ 诱导性 + 未购买用户无法回答</td><td>拆分：未购用户问功能预期，已购用户问真实体验</td></tr>
+      <tr><td>"激光功能是不是很吸引猫咪？"</td><td class="tag-bad">❌ 是非题、诱导</td><td>改为"您家猫平时玩玩具是什么状态？"</td></tr>
+      <tr><td>"如果价格降到 10 元您会买吗？"</td><td class="tag-bad">❌ 假设性问题，数据失真</td><td>改为"这类玩具您心理价位大概多少？为什么？"</td></tr>
+      <tr><td>一次性列出 8 个问题发问</td><td class="tag-bad">❌ 违反访谈节奏</td><td>一次一问，追问优先于推进</td></tr>
+      <tr><td>大纲全是功能评价，缺场景</td><td class="tag-warn">⚠️ 缺失关键信息</td><td>补充"上次猫拆家 / 半夜跑酷是什么情形"等具体场景问题</td></tr>
+      <tr><td>未覆盖安全与售后顾虑</td><td class="tag-warn">⚠️ 遗漏决策因素</td><td>补充：激光伤眼、羽毛误食、噪音、续航衰减</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step"><div class="num">✔</div><h2>审查通过的 5 条标准</h2></div>
+    <div class="grid2">
+      <ul>
+        <li><span class="tag-ok">✔</span> 开放式、不诱导</li>
+        <li><span class="tag-ok">✔</span> 单一信息点（一题只问一件事）</li>
+        <li><span class="tag-ok">✔</span> 口语化，受访者听得懂</li>
+      </ul>
+      <ul>
+        <li><span class="tag-ok">✔</span> 覆盖全部 5 个研究问题</li>
+        <li><span class="tag-ok">✔</span> 敏感点（安全 / 价格）有专门设计</li>
+      </ul>
+    </div>
+    <h3>审查流程</h3>
+    <ol>
+      <li>将第三节提示词粘贴到扣子 / 豆包，让 AI 生成一版访谈大纲</li>
+      <li>对照上表逐条标注问题（诱导 / 是非题 / 假设性 / 缺场景 / 遗漏）</li>
+      <li>把修改意见发回 AI，让其修订，直到满足 5 条通过标准</li>
+      <li>保留"AI 初稿 → 审查意见 → 修订稿"的完整记录，作为作业证据链</li>
+    </ol>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  AI 用户访谈专员建立方案 · 智能自动避障逗猫球 · <a href="index.html">返回首页</a>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
