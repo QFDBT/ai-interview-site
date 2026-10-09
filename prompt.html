@@ -31,6 +31,8 @@
 
   <div class="card">
     <div class="step"><div class="num">🤖</div><h2>系统提示词（一键复制）</h2></div>
+    <button class="btn btn-ghost" id="promptToggle" onclick="togglePrompt()">🔒 研究人员入口（点击展开提示词）</button>
+    <div id="promptSection" style="display:none; margin-top:14px;">
     <div class="prompt" id="promptBox"># 角色
 你是一名资深用户研究访谈专员，负责对"智能自动避障逗猫球"做用户访谈。
 
@@ -61,11 +63,12 @@
 - 受访者明确提出的不满或建议</div>
     <button class="btn btn-primary copybtn" id="copyBtn" onclick="copyPrompt()">📋 一键复制提示词</button>
     <p class="muted" style="margin-top:10px;">使用方法：新建一个智能体 / Agent → 将上述内容粘贴到系统提示词（人设与回复逻辑）→ 保存后即可开始访谈。访谈结束把纪要录入<a href="data.html">数据后台</a>。</p>
+    </div>
   </div>
 
   <div class="card" id="demo">
     <div class="step"><div class="num">💬</div><h2>模拟访谈演示</h2></div>
-    <p class="muted">以下为按提示词规则编写的本地演示脚本，展示 AI 专员的提问节奏：一次一问、开放式、有追问。在输入框回复可体验流程。</p>
+    <p class="muted">如需给受调查人员使用，请将 <a href="interview.html">interview.html</a> 页面（纯访谈界面，不含提示词）的链接或二维码发给他们，本页仅供研究小组成员查看。</p>
     <div class="chat">
       <div class="chat-log" id="chatLog"></div>
       <div class="chat-hint">演示脚本：共 5 轮对话，可随时点击输入框旁的按钮结束访谈查看纪要</div>
