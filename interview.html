@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>用户访谈 · 猫咪玩具体验</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background: #fff; }
+  .iv-head { text-align: center; padding: 34px 20px 10px; }
+  .iv-head h1 { font-size: 22px; }
+  .iv-head p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="iv-head">
+  <h1>🐱 猫咪玩具用户访谈</h1>
+  <p>感谢您参与本次访谈，约需 3 分钟，您的回答仅用于产品研究</p>
+</div>
+
+<main class="container" style="max-width:640px;">
+  <div class="chat">
+    <div class="chat-log" id="chatLog"></div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="请输入您的回答…" aria-label="访谈回复输入框">
+      <button id="endBtn" onclick="endInterview()">结束访谈</button>
+    </div>
+  </div>
+  <p class="muted" style="text-align:center; margin-top:14px;">如实回答即可，没有对错之分。您的反馈对改进产品非常重要。</p>
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
